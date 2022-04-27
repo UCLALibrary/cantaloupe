@@ -593,7 +593,7 @@ public abstract class AbstractResource {
                 getIdentifierPathComponent());
 
         final String newMetaIdentifierString =
-                MetaIdentifier.toURIPathComponent(newMetaIdentifier, getDelegateProxy());
+                newMetaIdentifier.toURIPathComponent(getDelegateProxy());
         publicRef.setPathComponent(identifierIndex, newMetaIdentifierString);
         return publicRef;
     }

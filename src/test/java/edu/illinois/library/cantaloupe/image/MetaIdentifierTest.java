@@ -98,27 +98,6 @@ class MetaIdentifierTest extends BaseTest {
         assertEquals(expected, actual);
     }
 
-    /* toURIPathComponent() */
-
-    @Test
-    void testToURIPathComponent() {
-        final Configuration config = Configuration.getInstance();
-        config.setProperty(Key.SLASH_SUBSTITUTE, "BUG");
-        config.setProperty(Key.META_IDENTIFIER_TRANSFORMER,
-                StandardMetaIdentifierTransformer.class.getSimpleName());
-
-        DelegateProxy delegateProxy   = TestUtil.newDelegateProxy();
-        MetaIdentifier metaIdentifier = MetaIdentifier.builder()
-                .withIdentifier("cats/:dogs")
-                .withPageNumber(2)
-                .withScaleConstraint(2, 3)
-                .build();
-        String actual                 = MetaIdentifier
-                .toURIPathComponent(metaIdentifier, delegateProxy);
-        String expected               = "catsBUG%3Adogs;2;2:3";
-        assertEquals(expected, actual);
-    }
-
     /* MetaIdentifier(MetaIdentifier) */
 
     @Test
@@ -283,6 +262,26 @@ class MetaIdentifierTest extends BaseTest {
         ScaleConstraint scaleConstraint = new ScaleConstraint(5, 6);
         assertThrows(IllegalStateException.class,
                 () -> instance.setScaleConstraint(scaleConstraint));
+    }
+
+    /* toURIPathComponent() */
+
+    @Test
+    void testToURIPathComponent() {
+        final Configuration config = Configuration.getInstance();
+        config.setProperty(Key.SLASH_SUBSTITUTE, "BUG");
+        config.setProperty(Key.META_IDENTIFIER_TRANSFORMER,
+                StandardMetaIdentifierTransformer.class.getSimpleName());
+
+        DelegateProxy delegateProxy   = TestUtil.newDelegateProxy();
+        MetaIdentifier metaIdentifier = MetaIdentifier.builder()
+                .withIdentifier("cats/:dogs")
+                .withPageNumber(2)
+                .withScaleConstraint(2, 3)
+                .build();
+        String actual                 = metaIdentifier.toURIPathComponent(delegateProxy);
+        String expected               = "catsBUG%3Adogs;2;2:3";
+        assertEquals(expected, actual);
     }
 
     /* toString() */

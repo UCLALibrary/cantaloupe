@@ -153,33 +153,6 @@ public final class MetaIdentifier {
     }
 
     /**
-     * Translates the meta-identifier into a URI path component.
-     *
-     * Reverses {@link #fromURIPathComponent(String, DelegateProxy)}.
-     *
-     * @param metaIdentifier Meta-identifier.
-     * @param delegateProxy Delegate proxy.
-     */
-    public static String toURIPathComponent(MetaIdentifier metaIdentifier,
-                                            DelegateProxy delegateProxy) {
-        // Encode just the identifier part.
-        final String slashedIdentifier = metaIdentifier.getIdentifier().toString();
-        final String deSlashedIdenfitier = StringUtils.encodeSlashes(slashedIdentifier);
-        final String encodedIdentifier = Reference.encode(deSlashedIdenfitier);
-        final MetaIdentifierTransformer xformer =
-                new MetaIdentifierTransformerFactory().newInstance(delegateProxy);
-        final String serializedMetaIdentifier;
-
-        metaIdentifier.setIdentifier(new Identifier(encodedIdentifier));
-        serializedMetaIdentifier = xformer.serialize(metaIdentifier);
-
-        LOGGER.debug("[Slash-substituted identifier: {}] -> [de-slashed identifier: {}] -> " +
-                        "[percent-encoded identifier: {}] -> [raw path component: {}]",
-                slashedIdentifier, deSlashedIdenfitier, encodedIdentifier, serializedMetaIdentifier);
-        return serializedMetaIdentifier;
-    }
-
-    /**
      * Creates a minimal valid instance. For more options, use {@link Builder}.
      */
     public MetaIdentifier(String identifier) {
@@ -284,6 +257,31 @@ public final class MetaIdentifier {
         if (isFrozen) {
             throw new IllegalStateException("Instance is frozen.");
         }
+    }
+
+    /**
+     * Translates the meta-identifier into a URI path component.
+     *
+     * Reverses {@link #fromURIPathComponent(String, DelegateProxy)}.
+     *
+     * @param delegateProxy Delegate proxy.
+     */
+    public String toURIPathComponent(DelegateProxy delegateProxy) {
+        // Encode just the identifier part.
+        final String slashedIdentifier = getIdentifier().toString();
+        final String deSlashedIdenfitier = StringUtils.encodeSlashes(slashedIdentifier);
+        final String encodedIdentifier = Reference.encode(deSlashedIdenfitier);
+        final MetaIdentifierTransformer xformer =
+                new MetaIdentifierTransformerFactory().newInstance(delegateProxy);
+        final String serializedMetaIdentifier;
+
+        setIdentifier(new Identifier(encodedIdentifier));
+        serializedMetaIdentifier = xformer.serialize(this);
+
+        LOGGER.debug("[Slash-substituted identifier: {}] -> [de-slashed identifier: {}] -> " +
+                        "[percent-encoded identifier: {}] -> [raw path component: {}]",
+                slashedIdentifier, deSlashedIdenfitier, encodedIdentifier, serializedMetaIdentifier);
+        return serializedMetaIdentifier;
     }
 
     @Override
