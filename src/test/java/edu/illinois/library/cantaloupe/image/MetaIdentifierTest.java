@@ -273,18 +273,18 @@ class MetaIdentifierTest extends BaseTest {
         config.setProperty(Key.META_IDENTIFIER_TRANSFORMER,
                 StandardMetaIdentifierTransformer.class.getSimpleName());
 
-        DelegateProxy delegateProxy   = TestUtil.newDelegateProxy();
-        MetaIdentifier metaIdentifier = MetaIdentifier.builder()
+        DelegateProxy delegateProxy     = TestUtil.newDelegateProxy();
+        MetaIdentifier metaIdentifier   = MetaIdentifier.builder()
                 .withIdentifier("cats/:dogs")
                 .withPageNumber(2)
                 .withScaleConstraint(2, 3)
                 .build();
-        MetaIdentifier metaIdentifierBeforeMethodCall = new MetaIdentifier(metaIdentifier);
-        String actual                 = metaIdentifier.toURIPathComponent(delegateProxy);
-        String expected               = "catsBUG%3Adogs;2;2:3";
+        MetaIdentifier beforeMethodCall = new MetaIdentifier(metaIdentifier);
+        String actual                   = metaIdentifier.toURIPathComponent(delegateProxy);
+        String expected                 = "catsBUG%3Adogs;2;2:3";
         assertEquals(expected, actual);
         // Make sure the call to toURIPathComponent didn't change the meta-identifier.
-        assertEquals(metaIdentifierBeforeMethodCall, metaIdentifier);
+        assertEquals(beforeMethodCall, metaIdentifier);
     }
 
     /* toString() */
