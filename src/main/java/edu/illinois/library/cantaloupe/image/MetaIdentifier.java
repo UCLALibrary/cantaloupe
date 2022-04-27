@@ -268,7 +268,8 @@ public final class MetaIdentifier {
      */
     public String toURIPathComponent(DelegateProxy delegateProxy) {
         // Encode just the identifier part.
-        final String slashedIdentifier = getIdentifier().toString();
+        final Identifier originalIdentifier = getIdentifier();
+        final String slashedIdentifier = originalIdentifier.toString();
         final String deSlashedIdenfitier = StringUtils.encodeSlashes(slashedIdentifier);
         final String encodedIdentifier = Reference.encode(deSlashedIdenfitier);
         final MetaIdentifierTransformer xformer =
@@ -277,6 +278,8 @@ public final class MetaIdentifier {
 
         setIdentifier(new Identifier(encodedIdentifier));
         serializedMetaIdentifier = xformer.serialize(this);
+        // Now that we've serialized the encoded meta-identifier, put it back to how it was before
+        setIdentifier(originalIdentifier);
 
         LOGGER.debug("[Slash-substituted identifier: {}] -> [de-slashed identifier: {}] -> " +
                         "[percent-encoded identifier: {}] -> [raw path component: {}]",

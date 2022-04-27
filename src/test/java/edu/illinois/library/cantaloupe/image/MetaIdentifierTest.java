@@ -279,9 +279,12 @@ class MetaIdentifierTest extends BaseTest {
                 .withPageNumber(2)
                 .withScaleConstraint(2, 3)
                 .build();
+        MetaIdentifier metaIdentifierBeforeMethodCall = new MetaIdentifier(metaIdentifier);
         String actual                 = metaIdentifier.toURIPathComponent(delegateProxy);
         String expected               = "catsBUG%3Adogs;2;2:3";
         assertEquals(expected, actual);
+        // Make sure the call to toURIPathComponent didn't change the meta-identifier.
+        assertEquals(metaIdentifierBeforeMethodCall, metaIdentifier);
     }
 
     /* toString() */
