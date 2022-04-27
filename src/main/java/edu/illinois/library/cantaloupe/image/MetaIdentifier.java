@@ -270,8 +270,8 @@ public final class MetaIdentifier {
         // Encode just the identifier part.
         final Identifier originalIdentifier = getIdentifier();
         final String slashedIdentifier = originalIdentifier.toString();
-        final String deSlashedIdenfitier = StringUtils.encodeSlashes(slashedIdentifier);
-        final String encodedIdentifier = Reference.encode(deSlashedIdenfitier);
+        final String deSlashedIdentifier = StringUtils.encodeSlashes(slashedIdentifier);
+        final String encodedIdentifier = Reference.encode(deSlashedIdentifier);
         final MetaIdentifierTransformer xformer =
                 new MetaIdentifierTransformerFactory().newInstance(delegateProxy);
         final String serializedMetaIdentifier;
@@ -283,7 +283,7 @@ public final class MetaIdentifier {
 
         LOGGER.debug("[Slash-substituted identifier: {}] -> [de-slashed identifier: {}] -> " +
                         "[percent-encoded identifier: {}] -> [raw path component: {}]",
-                slashedIdentifier, deSlashedIdenfitier, encodedIdentifier, serializedMetaIdentifier);
+                slashedIdentifier, deSlashedIdentifier, encodedIdentifier, serializedMetaIdentifier);
         return serializedMetaIdentifier;
     }
 
